@@ -26,9 +26,9 @@
             position: fixed; inset: 0; z-index: 1; background: #000;
             display: flex; justify-content: center; align-items: center;
         }
-        #shortsFrame { width: 100%; height: 100%; border: none; display: none; }
+        /* تعديل لعرض الفيديو المرفوع بدلاً من اليوتيوب */
+        #shortsFrame, #localVideo { width: 100%; height: 100%; border: none; display: none; object-fit: contain; }
 
-        /* منطقة الإعلان المشابهة ليوتيوب */
         #adOverlay {
             position: fixed; inset: 0; z-index: 50; background: #000;
             display: none; flex-direction: column; align-items: center; justify-content: center;
@@ -81,6 +81,7 @@
     </div>
     
     <iframe id="shortsFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <video id="localVideo" controls playsinline></video>
 </div>
 
 <div id="wp-bg"></div>
@@ -99,8 +100,8 @@
 </div>
 
 <div id="pSettings" class="glass" style="top:70px">
-    <label>رابط أو ID الفيديو:</label>
-    <input type="text" id="ytUrl" placeholder="أدخل الرابط أو المعرف هنا...">
+    <label>رابط أو اسم ملف الفيديو:</label>
+    <input type="text" id="ytUrl" value="A.mp4" placeholder="أدخل A.mp4 أو رابط يوتيوب">
     <button onclick="App.startPlayProcess()">تشغيل الآن 🎬</button>
 </div>
 
@@ -138,32 +139,42 @@
     const SMART_LINK = "https://www.profitablecpmratenetwork.com/p5xdvi8igm?key=bb15e730477910952e414434bb03be5b";
     let _sec = 0;
     let pendingVideoID = "";
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let isLocalFile = false;
 
     const App = {
-        // بدء عملية التشغيل بظهور الإعلان أولاً
         startPlayProcess: () => {
             const input = document.getElementById("ytUrl").value.trim();
-            let vID = "";
-            if (input.includes('shorts/')) vID = input.split('shorts/')[1].split('?')[0];
-            else if (input.includes('v=')) vID = input.split('v=')[1].split('&')[0];
-            else if (input.includes('youtu.be/')) vID = input.split('youtu.be/')[1].split('?')[0];
-            else vID = input;
-
-            if (vID.length >= 11) {
-                pendingVideoID = vID;
+            
+            // التحقق إذا كان المطلوب تشغيل ملف A.mp4 المرفوع
+            if (input.toLowerCase() === "a.mp4" || input === "A.mp4") {
+                isLocalFile = true;
+                pendingVideoID = "A.mp4";
                 UI.hideAll();
                 App.showAd();
-            } else { alert("الرجاء إدخال رابط صحيح"); }
+            } else {
+                // معالجة روابط يوتيوب كالسابق
+                let vID = "";
+                if (input.includes('shorts/')) vID = input.split('shorts/')[1].split('?')[0];
+                else if (input.includes('v=')) vID = input.split('v=')[1].split('&')[0];
+                else if (input.includes('youtu.be/')) vID = input.split('youtu.be/')[1].split('?')[0];
+                else vID = input;
+
+                if (vID.length >= 11) {
+                    isLocalFile = false;
+                    pendingVideoID = vID;
+                    UI.hideAll();
+                    App.showAd();
+                } else { alert("الرجاء إدخال رابط صحيح أو A.mp4"); }
+            }
         },
 
         showAd: () => {
             const adOverlay = document.getElementById("adOverlay");
             const skipBtn = document.getElementById("skipBtn");
             const timerSpan = document.getElementById("timer");
-            const frame = document.getElementById("shortsFrame");
             
-            frame.style.display = "none";
+            document.getElementById("shortsFrame").style.display = "none";
+            document.getElementById("localVideo").style.display = "none";
             adOverlay.style.display = "flex";
             
             let timeLeft = 5;
@@ -179,7 +190,6 @@
                     clearInterval(countdown);
                     skipBtn.classList.add("active");
                     skipBtn.innerText = "تخطي الإعلان »";
-                    // فتح الرابط الذكي في تبويب جديد عند انتهاء الوقت لزيادة الربح
                     window.open(SMART_LINK, '_blank');
                 }
             }, 1000);
@@ -188,9 +198,19 @@
         skipAd: () => {
             if (document.getElementById("skipBtn").classList.contains("active")) {
                 document.getElementById("adOverlay").style.display = "none";
-                const f = document.getElementById("shortsFrame");
-                f.style.display = "block";
-                f.src = `https://www.youtube-nocookie.com/embed/${pendingVideoID}?autoplay=1&loop=1&playlist=${pendingVideoID}&rel=0&controls=1`;
+                
+                if (isLocalFile) {
+                    // تشغيل ملف MP4 المرفوع على جيت هاب
+                    const v = document.getElementById("localVideo");
+                    v.style.display = "block";
+                    v.src = pendingVideoID; // سيأخذ ملف A.mp4 من نفس المجلد
+                    v.play();
+                } else {
+                    // تشغيل يوتيوب
+                    const f = document.getElementById("shortsFrame");
+                    f.style.display = "block";
+                    f.src = `https://www.youtube-nocookie.com/embed/${pendingVideoID}?autoplay=1&loop=1&playlist=${pendingVideoID}&rel=0&controls=1`;
+                }
                 App.visual("🎬");
             }
         },
@@ -244,7 +264,6 @@
         }
     };
 
-    // إعداد شبكة الإيموجي
     const emojis = ["💜","💌","💣","🫀","💎","😍","😂","🤣","😻","🔥","✨","⭐","🙈","🙊","🙉","❤️","💖","🌈"];
     const grid = document.getElementById("emojiGrid");
     emojis.forEach(e => {
