@@ -56,7 +56,6 @@
         
         input { padding: 12px; border-radius: 12px; border: 1px solid #333; background: rgba(0,0,0,0.2); color: #fff; outline: none; }
         button { cursor: pointer; font-weight: bold; background: #00a884; color: white; border: none; padding: 12px; border-radius: 12px; transition: 0.2s; }
-        button:hover { filter: brightness(1.1); }
     </style>
 </head>
 <body class="dark-theme">
@@ -67,18 +66,15 @@
                 atOptions = { 'key' : 'ecd37eb3b51978e4cf1c88fb23e69e0b', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
             </script>
             <script src="https://www.highperformanceformat.com/ecd37eb3b51978e4cf1c88fb23e69e0b/invoke.js"></script>
-            
             <div id="adTimer">جاري التحميل...</div>
             <button id="skipBtn" onclick="AdManager.skip()">تخطي الإعلان <i class="fas fa-forward"></i></button>
         </div>
-        <div style="margin-top: 100px; color: #666; font-size: 11px; letter-spacing: 1px;">ADVERTISEMENT</div>
     </div>
 
     <div id="sT"></div>
-
     <div id="videoContainer">
         <iframe id="shortsFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        <video id="localVideo" controls autoplay loop playsinline></video>
+        <video id="localVideo" controls autoplay loop playsinline preload="auto"></video>
     </div>
 
     <div id="wp-bg"></div>
@@ -97,27 +93,24 @@
     </div>
 
     <div id="pSettings" class="glass" style="top:130px">
-        <label style="font-size: 14px; opacity: 0.8;">رابط يوتيوب أو ملف محلي:</label>
-        <input type="text" id="ytUrl" placeholder="https://youtube.com/...">
-        <button onclick="AdManager.launchAd()">بدء التشغيل 🎬</button>
+        <input type="text" id="ytUrl" placeholder="رابط يوتيوب...">
+        <button onclick="AdManager.launchAd()">بدء 🎬</button>
     </div>
 
     <div id="pFilter" class="glass" style="top:190px">
-        <button onclick="UI.theme('dark')">🌙 الوضع الليلي</button>
-        <button onclick="UI.theme('light')">☀️ الوضع النهاري</button>
-        <button onclick="UI.filter('hue-rotate(280deg)')">🌸 فلتر الباستيل</button>
-        <button onclick="UI.filter('none')">❌ إيقاف الفلاتر</button>
+        <button onclick="UI.theme('dark')">🌙 ليلي</button>
+        <button onclick="UI.theme('light')">☀️ نهاري</button>
+        <button onclick="UI.filter('none')">❌ حذف الفلاتر</button>
     </div>
 
     <div id="pMagic" class="glass" style="top:250px">
-        <label>كثافة التأثير:</label>
-        <input type="number" id="emojiCount" value="5" max="20">
-        <button onclick="App.triggerMagic()">إطلاق السحر ✨</button>
+        <input type="number" id="emojiCount" value="5">
+        <button onclick="App.triggerMagic()">إطلاق ✨</button>
     </div>
 
     <div id="pPhr" class="glass" style="top:310px">
-        <input type="text" id="sPhr" placeholder="اكتب رسالة هنا...">
-        <button onclick="App.triggerPhrase()">عرض على الشاشة 🔔</button>
+        <input type="text" id="sPhr" placeholder="رسالة...">
+        <button onclick="App.triggerPhrase()">عرض 🔔</button>
     </div>
 
     <div id="pEmoji" class="glass" style="top:370px">
@@ -140,33 +133,26 @@
             launchAd: () => {
                 const url = document.getElementById("ytUrl").value.trim();
                 if(!url) return;
-                
                 UI.hideAll();
                 const overlay = document.getElementById("adOverlay");
+                overlay.style.display = "flex";
+                let timeLeft = 5;
                 const timer = document.getElementById("adTimer");
                 const skip = document.getElementById("skipBtn");
-                
-                overlay.style.display = "flex";
                 skip.style.display = "none";
-                
-                let timeLeft = 5;
-                timer.innerText = `يمكنك التخطي بعد ${timeLeft} ثوانٍ`;
-                
                 const countdown = setInterval(() => {
                     timeLeft--;
-                    timer.innerText = `يمكنك التخطي بعد ${timeLeft} ثوانٍ`;
+                    timer.innerText = `تخطي بعد ${timeLeft}`;
                     if(timeLeft <= 0) {
                         clearInterval(countdown);
                         timer.style.display = "none";
                         skip.style.display = "block";
                     }
                 }, 1000);
-
                 window.open(SMART_LINK, '_blank');
             },
             skip: () => {
                 document.getElementById("adOverlay").style.display = "none";
-                document.getElementById("adTimer").style.display = "block";
                 App.applyMedia();
             }
         };
@@ -176,48 +162,31 @@
                 const input = document.getElementById("ytUrl").value.trim();
                 const frame = document.getElementById("shortsFrame");
                 const local = document.getElementById("localVideo");
-                
                 if (input.includes('youtube.com') || input.includes('youtu.be')) {
-                    let vID = "";
-                    if (input.includes('shorts/')) vID = input.split('shorts/')[1].split('?')[0];
-                    else if (input.includes('v=')) vID = input.split('v=')[1].split('&')[0];
-                    else if (input.includes('youtu.be/')) vID = input.split('youtu.be/')[1].split('?')[0];
-                    
-                    local.style.display = "none";
-                    local.pause();
+                    let vID = input.includes('v=') ? input.split('v=')[1].split('&')[0] : input.split('/').pop();
+                    local.style.display = "none"; local.pause();
                     frame.style.display = "block";
-                    frame.src = `https://www.youtube-nocookie.com/embed/${vID}?autoplay=1&mute=0&loop=1&playlist=${vID}&rel=0`;
+                    frame.src = `https://www.youtube-nocookie.com/embed/${vID}?autoplay=1`;
                 } else if (input.length > 0) {
                     frame.style.display = "none";
-                    frame.src = "";
                     local.style.display = "block";
-                    local.src = input; 
-                    local.play();
+                    local.src = input; local.play();
                 }
             },
             visual: (emoji) => {
                 const z = document.getElementById("eZone");
-                z.innerText = emoji; 
-                z.style.fontSize = emoji.length > 5 ? "35px" : "130px";
-                z.classList.remove("pop"); 
-                void z.offsetWidth; 
-                z.classList.add("pop");
+                z.innerText = emoji; z.classList.remove("pop"); 
+                void z.offsetWidth; z.classList.add("pop");
             },
             triggerMagic: () => {
-                const items = ["✨","💎","🔥","🌟","🌈","👑"];
-                const count = document.getElementById('emojiCount').value;
-                const res = Array.from({length: count}, () => items[Math.floor(Math.random()*items.length)]).join('');
-                UI.hideAll();
-                App.visual(res);
+                App.visual("✨✨✨"); UI.hideAll();
             },
             triggerPhrase: () => {
                 const txt = document.getElementById("sPhr").value;
                 if(txt) { UI.hideAll(); App.visual(txt); }
             },
             checkAdmin: () => {
-                if(document.getElementById("adminPass").value === _0xP) {
-                    UI.hideAll(); alert("تم تفعيل وضع المسؤول");
-                } else { alert("كلمة المرور غير صحيحة"); }
+                if(document.getElementById("adminPass").value === _0xP) { UI.hideAll(); alert("مرحباً!"); }
             }
         };
 
@@ -225,35 +194,38 @@
             toggle: (id) => {
                 const t = document.getElementById(id);
                 const isV = t.style.display === "flex";
-                UI.hideAll();
-                t.style.display = isV ? "none" : "flex";
+                UI.hideAll(); t.style.display = isV ? "none" : "flex";
             },
             hideAll: () => { document.querySelectorAll('.glass').forEach(p => p.style.display = "none"); },
             theme: (m) => { document.body.classList.toggle('light-theme', m === 'light'); UI.hideAll(); },
             filter: (f) => { document.getElementById('videoContainer').style.filter = f; UI.hideAll(); }
         };
 
+        // تعبئة الإيموجي
         const emojis = ["❤️","🔥","🤣","😍","✨","💎","⭐","👍","🎉"];
         const grid = document.getElementById("emojiGrid");
         emojis.forEach(e => {
             let btn = document.createElement("div");
-            btn.innerText = e; btn.style.fontSize = "22px"; btn.style.cursor = "pointer";
+            btn.innerText = e; btn.style.cursor = "pointer";
             btn.onclick = () => { UI.hideAll(); App.visual(e); };
             grid.appendChild(btn);
         });
 
         window.onload = () => {
             const local = document.getElementById("localVideo");
-            // تم تغيير v3.mp4 إلى A.mp4 هنا
+            // استخدام مسار نسبي مباشر لـ GitHub
             local.src = "A.mp4"; 
+            local.load(); 
             local.style.display = "block";
             local.muted = true;
-            local.play().catch(e => {});
+            local.play().catch(err => console.log("تحتاج ضغطة لتشغيل الفيديو"));
         };
 
         document.body.addEventListener('click', () => {
             if(!firstClick) {
-                document.getElementById("localVideo").muted = false;
+                const local = document.getElementById("localVideo");
+                local.muted = false;
+                local.play();
                 firstClick = true;
             }
         });
