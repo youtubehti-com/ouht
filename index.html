@@ -143,9 +143,10 @@
     const App = {
         startPlayProcess: () => {
             const input = document.getElementById("ytUrl").value.trim();
+            // تم تعديل الشرط ليشمل A.mp4 بالحرف الكبير كما في GitHub
             if (input.toLowerCase() === "a.mp4") {
                 isLocalFile = true;
-                pendingVideoID = "./A.mp4"; // التأكد من المسار المحلي
+                pendingVideoID = "A.mp4"; // اسم الملف كما هو في الصورة المرفوعة
                 UI.hideAll();
                 App.showAd();
             } else {
@@ -194,10 +195,10 @@
                     const v = document.getElementById("localVideo");
                     v.style.display = "block";
                     v.src = pendingVideoID;
-                    v.load(); // إعادة تحميل المصدر
+                    v.load(); 
                     v.play().catch(e => {
-                        console.log("فشل التشغيل التلقائي، سيتم العرض مع تفعيل الصوت يدوياً");
-                        v.muted = true; // نفعّل الكتم في حال رفض المتصفح
+                        console.log("فشل التشغيل التلقائي المسموع، يتم التشغيل صامتاً");
+                        v.muted = true; 
                         v.play();
                     });
                 } else {
