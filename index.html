@@ -2,239 +2,149 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio Pro - Premium Clean Edition</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <script src="https://pl29310381.profitablecpmratenetwork.com/f3/f1/14/f3f11422479a989121f35119a95ea880.js"></script>
-    <script src="https://pl29310384.profitablecpmratenetwork.com/1f/4d/fc/1f4dfcd01832df6433005c331053354d.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التحكم الصوتي المتقدم | الوقف بالروم</title>
     <style>
         :root {
-            --p: #e2d1f9; --pk: #ffdae9; --g: #ffd700; --b: #00d2ff;
-            --bg: #0b141a; --pnl: rgba(23, 33, 39, 0.98); --txt: white; --wp: 0.1;
+            --primary: #1b4d3e;
+            --gold: #c5a059;
+            --bg: #f9fbf9;
         }
-        .light-theme {
-            --bg: #f0f2f5; --pnl: rgba(255, 255, 255, 0.95); --txt: #111b21; --p: #6a5acd; --wp: 0.4;
-        }
-        body {
-            margin: 0; background: var(--bg); color: var(--txt);
-            font-family: 'Segoe UI', sans-serif; height: 100vh;
-            overflow: hidden; transition: 0.5s; user-select: none;
-        }
-        
-        #videoContainer { position: fixed; inset: 0; z-index: 1; background: #000; display: flex; justify-content: center; align-items: center; }
-        #shortsFrame, #localVideo { width: 100%; height: 100%; border: none; display: none; object-fit: cover; }
-        
-        #adOverlay {
-            position: fixed; inset: 0; z-index: 10002; background: rgba(0,0,0,0.96);
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .ad-box { width: 300px; height: 250px; background: #000; position: relative; border: 1px solid var(--p); box-shadow: 0 0 30px rgba(226, 209, 249, 0.2); }
-        
-        #skipBtn {
-            position: absolute; bottom: -70px; right: 0; background: #00a884;
-            color: white; border: none; padding: 12px 25px; cursor: pointer;
-            display: none; font-size: 15px; border-radius: 8px; font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        #adTimer { position: absolute; bottom: -50px; left: 0; color: #aaa; font-size: 14px; }
 
-        #wp-bg { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: var(--wp); background-image: url('https://web.whatsapp.com/img/bg-chat-tile-dark_a4be512e719549d10e05527f6a012d27.png'); }
-        #sT { position: fixed; top: 0; left: 0; width: 70px; height: 70px; z-index: 9999; }
-        #subC { position: fixed; top: 25px; right: 85px; background: var(--pnl); border: 1px solid var(--pk); padding: 6px 18px; border-radius: 25px; display: flex; align-items: center; gap: 8px; z-index: 1000; font-size: 14px; }
-        
-        .node { position: fixed; width: 50px; height: 50px; background: var(--pnl); border: 1.5px solid var(--p); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; color: var(--p); transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .node:active { transform: scale(0.85); }
-        
-        .glass { position: fixed; background: var(--pnl); border: 1px solid var(--p); border-radius: 20px; padding: 20px; display: none; z-index: 9000; flex-direction: column; gap: 12px; right: 80px; width: 230px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-        
-        #eZone { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 8000; pointer-events: none; opacity: 0; text-align: center; }
-        .pop { animation: cP 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards; }
-        @keyframes cP { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; } }
-        
-        input { padding: 12px; border-radius: 12px; border: 1px solid #333; background: rgba(0,0,0,0.2); color: #fff; outline: none; }
-        button { cursor: pointer; font-weight: bold; background: #00a884; color: white; border: none; padding: 12px; border-radius: 12px; transition: 0.2s; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg);
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* حاوية التحكم العائمة */
+        .master-controls {
+            position: fixed; bottom: 20px; right: 20px;
+            background: white; padding: 15px; border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex; align-items: center; gap: 15px; z-index: 9999;
+        }
+
+        .btn {
+            width: 55px; height: 55px; border-radius: 50%;
+            border: none; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            font-size: 24px; transition: 0.3s;
+        }
+
+        #activationBtn { background: var(--gold); color: white; }
+        #playPauseBtn { background: var(--primary); color: var(--gold); display: none; }
+
+        .text-container {
+            max-width: 800px; background: white; padding: 40px;
+            border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-top: 50px;
+        }
+
+        /* تأثير المزامنة الذكي */
+        .sync-block {
+            padding: 10px; margin: 10px 0; border-radius: 8px;
+            transition: all 0.5s ease; border-right: 4px solid transparent;
+        }
+
+        .highlight {
+            background-color: rgba(197, 160, 89, 0.15);
+            border-right: 4px solid var(--gold);
+            transform: translateX(-5px);
+        }
+
+        /* إخفاء الفيديو تماماً مع الحفاظ على قدرة السحب منه */
+        #videoSource {
+            position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;
+        }
     </style>
 </head>
-<body class="dark-theme">
+<body>
 
-    <div id="adOverlay">
-        <div class="ad-box">
-            <script>
-                atOptions = { 'key' : 'ecd37eb3b51978e4cf1c88fb23e69e0b', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
-            </script>
-            <script src="https://www.highperformanceformat.com/ecd37eb3b51978e4cf1c88fb23e69e0b/invoke.js"></script>
-            <div id="adTimer">جاري التحميل...</div>
-            <button id="skipBtn" onclick="AdManager.skip()">تخطي الإعلان <i class="fas fa-forward"></i></button>
-        </div>
+<!-- سحب الفيديو من GitHub -->
+<video id="videoSource" preload="auto">
+    <!-- استبدلي الرابط التالي برابط الـ Raw الخاص بكِ من GitHub -->
+    <source src="https://raw.githubusercontent.com/username/repo/main/leson-video.mp4" type="video/mp4">
+</video>
+
+<div class="master-controls">
+    <div id="initLabel" style="font-size: 14px; font-weight: bold; color: var(--primary);">تفعيل الصوت 👈</div>
+    <button id="activationBtn" class="btn" onclick="initAndLink()">☝️</button>
+    <button id="playPauseBtn" class="btn" onclick="togglePlayback()">▶️</button>
+</div>
+
+<div class="text-container">
+    <div id="segment_1" class="sync-block">
+        <h3>مقدمة الدرس</h3>
+        <p>بسم الله الرحمن الرحيم، نرحب بكم في هذا اللقاء التعليمي.</p>
     </div>
 
-    <div id="sT"></div>
-    <div id="videoContainer">
-        <iframe id="shortsFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        <video id="localVideo" controls autoplay loop playsinline preload="auto"></video>
+    <div id="segment_2" class="sync-block">
+        <h3>تعريف الروم</h3>
+        <p>الروم هو الإتيان ببعض الحركة بصوت خفي يدركه القريب.</p>
     </div>
+</div>
 
-    <div id="wp-bg"></div>
+<script>
+    const media = document.getElementById('videoSource');
+    const playBtn = document.getElementById('playPauseBtn');
+    const initBtn = document.getElementById('activationBtn');
+    const initLabel = document.getElementById('initLabel');
 
-    <div id="subC">
-        <i class="fa-solid fa-heart" style="color: #ff4f4f;"></i>
-        <span style="color:var(--pk)">1,405</span>
-    </div>
+    // دالة الربط والتفعيل المباشر
+    function initAndLink() {
+        // "حقن" الصوت في المتصفح لكسر الحماية
+        media.play().then(() => {
+            media.pause();
+            media.currentTime = 0;
+            
+            // تبديل الواجهة
+            initBtn.style.display = 'none';
+            initLabel.style.display = 'none';
+            playBtn.style.display = 'flex';
+        }).catch(e => console.log("بانتظار التفاعل الحقيقي..."));
+    }
 
-    <div style="display:flex; flex-direction:column; gap:10px;">
-        <div class="node" style="top:130px; right:20px" onclick="UI.toggle('pSettings')"><i class="fas fa-play"></i></div>
-        <div class="node" style="top:190px; right:20px" onclick="UI.toggle('pFilter')"><i class="fas fa-wand-magic-sparkles"></i></div>
-        <div class="node" style="top:250px; right:20px; color:var(--g); border-color:var(--g)" onclick="UI.toggle('pMagic')"><i class="fas fa-bolt"></i></div>
-        <div class="node" style="top:310px; right:20px; color:var(--b); border-color:var(--b)" onclick="UI.toggle('pPhr')"><i class="fas fa-comment-alt"></i></div>
-        <div class="node" style="top:370px; right:20px" onclick="UI.toggle('pEmoji')"><i class="fas fa-laugh-beam"></i></div>
-    </div>
+    function togglePlayback() {
+        if (media.paused) {
+            media.play();
+            playBtn.innerText = "⏸️";
+        } else {
+            media.pause();
+            playBtn.innerText = "▶️";
+        }
+    }
 
-    <div id="pSettings" class="glass" style="top:130px">
-        <input type="text" id="ytUrl" placeholder="رابط يوتيوب...">
-        <button onclick="AdManager.launchAd()">بدء 🎬</button>
-    </div>
+    // نظام المزامنة مع "التجاهل الذكي"
+    media.ontimeupdate = () => {
+        const now = media.currentTime;
+        
+        // خريطة التوقيت: اكتبي فقط الأجزاء التي تريدين تلوينها
+        // أي وقت آخر في الفيديو سيتم تجاهله آلياً ولن يحدث خطأ
+        const timeline = [
+            { id: 'segment_1', start: 0, end: 12 },
+            { id: 'segment_2', start: 13, end: 45 }
+        ];
 
-    <div id="pFilter" class="glass" style="top:190px">
-        <button onclick="UI.theme('dark')">🌙 ليلي</button>
-        <button onclick="UI.theme('light')">☀️ نهاري</button>
-        <button onclick="UI.filter('none')">❌ حذف الفلاتر</button>
-    </div>
-
-    <div id="pMagic" class="glass" style="top:250px">
-        <input type="number" id="emojiCount" value="5">
-        <button onclick="App.triggerMagic()">إطلاق ✨</button>
-    </div>
-
-    <div id="pPhr" class="glass" style="top:310px">
-        <input type="text" id="sPhr" placeholder="رسالة...">
-        <button onclick="App.triggerPhrase()">عرض 🔔</button>
-    </div>
-
-    <div id="pEmoji" class="glass" style="top:370px">
-        <div id="emojiGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;"></div>
-    </div>
-
-    <div id="pAdmin" class="glass" style="top:130px; border-color: var(--g); z-index: 10000;">
-        <input type="password" id="adminPass" placeholder="كلمة المرور">
-        <button onclick="App.checkAdmin()">دخول</button>
-    </div>
-
-    <div id="eZone"></div>
-
-    <script>
-        const _0xP = "Ha20262025@";
-        const SMART_LINK = "https://www.profitablecpmratenetwork.com/p5xdvi8igm?key=bb15e730477910952e414434bb03be5b";
-        let firstClick = false;
-
-        const AdManager = {
-            launchAd: () => {
-                const url = document.getElementById("ytUrl").value.trim();
-                if(!url) return;
-                UI.hideAll();
-                const overlay = document.getElementById("adOverlay");
-                overlay.style.display = "flex";
-                let timeLeft = 5;
-                const timer = document.getElementById("adTimer");
-                const skip = document.getElementById("skipBtn");
-                skip.style.display = "none";
-                const countdown = setInterval(() => {
-                    timeLeft--;
-                    timer.innerText = `تخطي بعد ${timeLeft}`;
-                    if(timeLeft <= 0) {
-                        clearInterval(countdown);
-                        timer.style.display = "none";
-                        skip.style.display = "block";
-                    }
-                }, 1000);
-                window.open(SMART_LINK, '_blank');
-            },
-            skip: () => {
-                document.getElementById("adOverlay").style.display = "none";
-                App.applyMedia();
-            }
-        };
-
-        const App = {
-            applyMedia: () => {
-                const input = document.getElementById("ytUrl").value.trim();
-                const frame = document.getElementById("shortsFrame");
-                const local = document.getElementById("localVideo");
-                if (input.includes('youtube.com') || input.includes('youtu.be')) {
-                    let vID = input.includes('v=') ? input.split('v=')[1].split('&')[0] : input.split('/').pop();
-                    local.style.display = "none"; local.pause();
-                    frame.style.display = "block";
-                    frame.src = `https://www.youtube-nocookie.com/embed/${vID}?autoplay=1`;
-                } else if (input.length > 0) {
-                    frame.style.display = "none";
-                    local.style.display = "block";
-                    local.src = input; local.play();
+        timeline.forEach(item => {
+            const el = document.getElementById(item.id);
+            if (el) {
+                if (now >= item.start && now <= item.end) {
+                    el.classList.add('highlight');
+                } else {
+                    el.classList.remove('highlight');
                 }
-            },
-            visual: (emoji) => {
-                const z = document.getElementById("eZone");
-                z.innerText = emoji; z.classList.remove("pop"); 
-                void z.offsetWidth; z.classList.add("pop");
-            },
-            triggerMagic: () => {
-                App.visual("✨✨✨"); UI.hideAll();
-            },
-            triggerPhrase: () => {
-                const txt = document.getElementById("sPhr").value;
-                if(txt) { UI.hideAll(); App.visual(txt); }
-            },
-            checkAdmin: () => {
-                if(document.getElementById("adminPass").value === _0xP) { UI.hideAll(); alert("مرحباً!"); }
-            }
-        };
-
-        const UI = {
-            toggle: (id) => {
-                const t = document.getElementById(id);
-                const isV = t.style.display === "flex";
-                UI.hideAll(); t.style.display = isV ? "none" : "flex";
-            },
-            hideAll: () => { document.querySelectorAll('.glass').forEach(p => p.style.display = "none"); },
-            theme: (m) => { document.body.classList.toggle('light-theme', m === 'light'); UI.hideAll(); },
-            filter: (f) => { document.getElementById('videoContainer').style.filter = f; UI.hideAll(); }
-        };
-
-        // تعبئة الإيموجي
-        const emojis = ["❤️","🔥","🤣","😍","✨","💎","⭐","👍","🎉"];
-        const grid = document.getElementById("emojiGrid");
-        emojis.forEach(e => {
-            let btn = document.createElement("div");
-            btn.innerText = e; btn.style.cursor = "pointer";
-            btn.onclick = () => { UI.hideAll(); App.visual(e); };
-            grid.appendChild(btn);
-        });
-
-        window.onload = () => {
-            const local = document.getElementById("localVideo");
-            // استخدام مسار نسبي مباشر لـ GitHub
-            local.src = "A.mp4"; 
-            local.load(); 
-            local.style.display = "block";
-            local.muted = true;
-            local.play().catch(err => console.log("تحتاج ضغطة لتشغيل الفيديو"));
-        };
-
-        document.body.addEventListener('click', () => {
-            if(!firstClick) {
-                const local = document.getElementById("localVideo");
-                local.muted = false;
-                local.play();
-                firstClick = true;
             }
         });
+    };
 
-        let _sec = 0;
-        document.getElementById('sT').onclick = () => {
-            _sec++; if(_sec >= 5) { UI.toggle('pAdmin'); _sec = 0; }
-            setTimeout(() => _sec = 0, 2000);
-        };
-    </script>
+    // معالجة حالة انتهاء الفيديو
+    media.onended = () => {
+        playBtn.innerText = "▶️";
+        media.currentTime = 0;
+    };
+</script>
+
 </body>
 </html>
