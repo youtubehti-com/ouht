@@ -4,17 +4,32 @@
     <meta charset="UTF-8">
     <title>Video Host Source</title>
     <style>
-        body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        video { max-width: 100%; border: 2px solid #c5a059; }
+        body { background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; color: white; }
+        video { width: 90%; max-width: 800px; border: 2px solid #c5a059; }
+        .status { margin-top: 10px; font-family: sans-serif; color: #c5a059; }
     </style>
 </head>
 <body>
 
-    <!-- تم تعديل الاسم هنا ليطابق الملف الموجود في الصورة 1000098525.jpg بالضبط -->
-    <video id="mainVideo" controls crossorigin="anonymous" preload="auto">
-        <source src="lesson-video.mp4" type="video/mp4">
-        متصفحك لا يدعم تشغيل الفيديو.
+    <video id="mainVideo" controls preload="auto" playsinline>
+        <!-- استبدلي USERNAME و REPO ببياناتك من الصورة -->
+        <source src="https://raw.githubusercontent.com/youtubehti-com/ouht/main/lesson-video.mp4" type="video/mp4">
+        المتصفح لا يدعم التشغيل.
     </video>
+
+    <div class="status" id="videoStatus">جاري فحص الملف...</div>
+
+    <script>
+        const v = document.getElementById('mainVideo');
+        const s = document.getElementById('videoStatus');
+
+        v.oncanplay = () => { s.innerText = "✅ الفيديو جاهز للتشغيل"; };
+        
+        v.onerror = () => { 
+            s.innerText = "❌ خطأ: الرابط غير صحيح أو الملف غير متاح";
+            console.error("Video Error:", v.error);
+        };
+    </script>
 
 </body>
 </html>
